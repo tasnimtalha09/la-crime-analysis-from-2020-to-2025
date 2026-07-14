@@ -1,6 +1,8 @@
 <div style="text-align: justify;">
 
-# Introduction
+# Los Angeles Crime Analysis
+
+## Introduction
 This project explores over five years of crime data reported by the Los Angeles Police Department (LAPD), spanning 2020 to 2025. By applying data cleaning, exploratory analysis, visualization, and machine learning techniques, the study seeks to uncover meaningful patterns in victim demographics, crime categories, geographic hotspots, and temporal trends. Beyond descriptive insights, the project also attempts to answer a key predictive question: *Can victim and crime characteristics be used to determine whether an incident is violent or non-violent?*
 
 The broader aim is to demonstrate how data-driven methods can transform raw records into actionable knowledge—helping stakeholders allocate resources more effectively and opening discussions on how similar approaches could be applied in other contexts, including Bangladesh. The notebook can be found [here](/Notebook.ipynb).
@@ -8,13 +10,13 @@ The broader aim is to demonstrate how data-driven methods can transform raw reco
 *This project was part of my course requirement for **Business Analytics** (course code: K301) at the **Institute of Business Administration (IBA), University of Dhaka**.*
 
 
-## Background 
-The dataset used for the assignment is titled Crime Data from 2020 to Present, which was taken from the [official website](https://catalog.data.gov/dataset/crime-data-from-2020-to-present) for data of the US government. This dataset includes reported criminal events in Los Angeles from 2020 till March 2025. It is compiled from LAPD crime reports and includes data transcribed from paper records. To safeguard privacy of the victims, some location and address information as well as victim descent and gender have been cyphered or is missing. The dataset is part of the LAPD's transition to the FBI-mandated NIBRS system, and while it is accurate, minor errors may occur. It is a useful tool for analyzing crime trends in the city. The metadata for this dataset can be found [here](https://catalog.data.gov/harvest/object/aefb0682-9bda-4700-90ed-86bb20e210c6) and [here](/Metadata.json).
+### Background 
+The dataset used for the assignment is titled Crime Data from 2020 to Present, which was taken from the [official website](https://catalog.data.gov/dataset/crime-data-from-2020-to-present) for data of the US government. This dataset includes reported criminal events in Los Angeles from 2020 till March 2025. It is compiled from LAPD crime reports and includes data transcribed from paper records. To safeguard privacy of the victims, some location and address information as well as victim descent and gender have been cyphered or is missing. The dataset is part of the LAPD's transition to the FBI-mandated NIBRS system, and while it is accurate, minor errors may occur. It is a useful tool for analyzing crime trends in the city. The metadata for this dataset can be found [here](https://catalog.data.gov/harvest/object/aefb0682-9bda-4700-90ed-86bb20e210c6) and [here](/datasets/metadata.json).
 
 The dataset has a total of **1,004,991 rows** and **28 columns**. Not all of them are relevant for this assignment. Some of these columns were later dropped in the cleaning and modelling phase. Some rows were also removed for the same reason in the later phases. As the dataset CSV file size was enormous (255.5 MB), it was converted into parquet format (43.2 MB) for ease up computer memory and reduce time of execution. We store the dataset with the alias `crime`.
 
 
-## Tools Used
+### Tools Used
 For my deep dive into the crime data of Los Angeles, I harnessed the power of several key tools:
 * **Python:** The core programming language powering my analysis, enabling flexible data manipulation and modeling.
 * **`pandas`:** Essential for cleaning, transforming, and structuring the crime dataset.
@@ -27,7 +29,7 @@ In short, I leveraged python and some of its libraries (primarily `pandas`, `mat
 
 
 
-# Data Cleaning & Pre-processing
+## Data Cleaning & Pre-processing
 Like almost all datasets, this dataset too was messy at the source. It needed substantial cleaning before conducting exploratory data analysis or running models. In the second stage of the assignment (the first stage being loading the dataset), we clean all the issues of the dataset and process the data as per our need. Here are the cleaning processes conducted step-by-step (more details in the report):
 1. **Dropping Irrelevant Columns:** The dataset had a total of 28 columns. Many of these columns were data types that weren't relevant for our assignment as exploring and modelling em wis too advanced. So, we do our due diligence and drop those columns by using **`crime.drop(columns)`**. We identified **12 redundant columns** and drop them from our dataset. This brings the number of columns down to 16.
 2. **Renaming the Columns:** Almost all the columns had either incoherent alphabetical sorting or obscure naming that any outside readers will struggle to understand. So, as part of our next step, we renamed all the columns using **`crime.rename()`** into a much easier format by following snake-casing format, dropping the hyphens (`-`) or spaces for dashes (`_`) and provided clear context in the column naming so that everyone can apprehend what column signifies which. For example, “`AREA_NAME`” was converted to “`area`”, “`Part 1-2`” was converted to “`crime_class`”, and so on.
@@ -38,7 +40,7 @@ Like almost all datasets, this dataset too was messy at the source. It needed su
 
 
 
-# Descriptive Statistics & Exploratory Data Analysis (EDA)
+## Descriptive Statistics & Exploratory Data Analysis (EDA)
 In this part of the report, we go through the finished the data and conduct various analyses. Exploratory Data Analysis (EDA) is a critical first step in data analysis where the goal is to explore and summarize the key characteristics of a dataset. Before jumping on to the exploratory data analysis, let us take a look at the first five rows of the clean data:
 
 ***Table 1.** First Five Rows of the Dataset*
@@ -53,7 +55,7 @@ In this part of the report, we go through the finished the data and conduct vari
 
 
 
-## Summary Statistics
+### Summary Statistics
 The dataset had only a handful number of numeric columns. So, we determine the summary statistics for the numeric columns using `crime.describe().round(decimals = 3)`. The results of the summary statistics are presented in the table below:
 
 ***Table 2:** Summary Statistics*
@@ -75,58 +77,58 @@ From the table, we can find quite some findings about the numeric columns of the
 3. Date & Time Occurred: The earliest date-time when the crime took place is January 1, 2020 at 0100 hours and the latest date is Mach 26, 2025 at 0533 hours. 50% of the crimes reported was between March 21, 2021 at 2330 hours and November 11, 2023 at 1612 hours.
 
 
-## Exploratory Data Analysis
+### Exploratory Data Analysis
 We found a lot of things while going through the data. Some of the most crucial and interesting findings are shared below:
 
-### Finding 1
+#### Finding 1
 The age of the victims is **right-tailed**, meaning the distribution is **positively-skewed**. But not by much. This analysis shows us that younger people were more prone towards victims of crimes in Los Angeles between 2020 and 2025.
 
 ![Age Distribution of the Victims](Assets/finding1.png)
 ***Figure 1:** The  Distribution of the Victims by Age.*
 
-### Finding 2
+#### Finding 2
 The people of **H descents are the most victims of crimes-both violent and less violent**. Following them, are descents **W** and **B**. This finding is one of the most important findings as this will allow the police department allocate resources meaningfully. This insight will allow them to focus more on people of this descent and ensure their safety and protection.
 
 ![Descent Distribution of the Victims](Assets/finding2.png)
 ***Figure 2:** The Distribution of the victims by descent.*
 
-### Finding 3
+#### Finding 3
 As per the data, **Males are the most victims of violent crimes** whereas **Females are the most victim of less violent crimes**. The other sexes recorded also faced crimes, but those records were not significant compared to the ones of men and women. Now this can also mean that females are not reporting the crimes happened to them. Without statistical tests, this cannot be verified. Overall, males face the most violence.
 
 ![Gender Distribution of the Victims](Assets/finding3.png)
 ***Figure 3:** The Distribution of the Victims by Sex.*
 
-### Finding 4
+#### Finding 4
 This finding is also a very crucial one. As per the data, the most recorded less violent crime is **Battery-simple assault**. At the same time, the most recorded violent crime is **Burglary from vehicles**. This finding is crucial because it will allow responders to prepare accordingly before handling any situations. The police force can train their officers to respond appropriately to these crimes. The other most common less violent crimes are **Theft of identity**, **Intimate partner simple assault**, etc. The other common violent crimes are **Assault with deadly weapon**, **aggravated assault**, **Theft plain-petty ($950 & under)**, etc.
 
 ![Crime Distribution](Assets/finding4.png)
 ***Figure 4:** The Distribution of the Victims by Crime Type.*
 
-### Finding 5
+#### Finding 5
 Another important insight-we identified the top crime-prone areas of Los Angeles. As per the data, **Central had the most reported violent crimes** whereas **77th Street had the highest less violent crimes**. This insight will allow the police departments to prepare and respond to these areas appropriately. They can prepare backups ready for crime calls from such area. Other common areas include **Pacific**, **Southwest**, **Hollywood**, etc.
 
 ![Crime Prone Areas](Assets/finding5.png)
 ***Figure 5:** The Most Crime Prone Areas in Los Angeles.*
 
-### Finding 6
+#### Finding 6
 Now, we take a look at the crimes' status from the LAPD's side. As can be shown from the graph below, **a huge number of crimes are still under investigation**. Compared to the number of active investigations, the number of arrests and other methods are very few. Now it is understandable that at the same time, a lot of crimes will be under investigation. But this insight will allow the police departments to streamline their investigation process by means of either higher resource allocation or other measures deemed appropriate.
 
 ![Crime Status](Assets/finding7.png)
 ***Figure 6:** The Crime Status from LAPD's Side.*
 
-### Finding 7
+#### Finding 7
 Premises tell us about the contextual environment of the data— the setting in which the crime took place. From the graph we can see that, **a huge number of less violent crimes took place in single family dwelling** whereas **a high number of violent crimes took place in the streets**. Premises add critical context about the crime setting. LAPD can develop countermeasures from this insight.
 
 ![Premises Distribution](Assets/finding6.png)
 ***Figure 7:** The Distribution of the Victims by Premises.*
 
-### Finding 8
+#### Finding 8
 Now, we get into some time-series analysis. As per the data, **the highest number of crimes occurred at 1200 hours (12:00 PM)** and **the lowest number of crimes took place at 0500 hours (05:00 AM)**. This data will help police departments re-organize their schedules and assign more patrol at the high crime-hours.
 
 ![Time Series Analysis](Assets/finding8.png)
 ***Figure 8:** The Time Series Analysis of Crimes.*
 
-### Finding 9
+#### Finding 9
 When we analyzed the data based on the days of the weak and the months of the year, we saw that almost all the days or months had roughly the same number of crimes reported. So, no insights could be produced from here. Crime doesn't vary on the large scale when thinking of days or months. The number of crimes across hours and days can be visualised via the following heatmap:
 
 ![Heatmap of Days vs. Hours](Assets/heatmap1.png)
@@ -137,7 +139,7 @@ The number of crimes across days and months can also be visualised via the follo
 ![Heatmap of Months vs. Days](Assets/heatmap2.png)
 ***Figure 10:** Heatmap of Crimes by Months and Days.*
 
-### Finding 10
+#### Finding 10
 Finding 10: For our last finding, we tracked the crime count over the years (2020-2025). As per the data, **the number of crimes appeared to go down**. But that is not the case. As per the data source:
 
 > The LAPD implemented a new Records Management System for reporting arrests anc rimes on March 7, 2024. The FBI's mission to collect NIBRS-only data is being mei by the implementation of this new system. Users will only be able to view incidents that have been reported in the retiring system during this transition. 
@@ -149,11 +151,11 @@ So. this explains the below graph that the amount of crime seems to go down.
 
 
 
-# Modelling & Performance Comparison
+## Modelling & Performance Comparison
 Before entering the final phase of the assignment-machine learning modelling— we need to modify our dataset once again to fit the models.
 
 
-## Data Preparation for Modelling
+### Data Preparation for Modelling
 1. Dropped the unnecessary columns like ID, date & time settings, and locations.
 2. As the premise and crime description columns had a lot of values, we keep only the first 10 values of each column because the first 10 values of premise make up around 79% of all the values and the first 10 crime descriptions make up around 67%. We convert the rest of the values to "`Other`" crimes.
 3. We scale the "`victim_age`" column using MinMax Scaling. Then we dummy encode the whole dataset.
@@ -161,40 +163,40 @@ Before entering the final phase of the assignment-machine learning modelling— 
 5. Lastly, we conduct a train-test split at the 70:30 ratio with stratification enabled for a proportionate distribution of the independent and target variables.
 
 
-## Machine Learning Modelling
+### Machine Learning Modelling
 From analyzing the dataset, we came across a question that can help the police department-***Can the crime & victim characteristics predict whether a crime is less or more violent?*** It is a binary question which can be answered using the classification models. 
 
 In this section, we take a look at the models used. The performance of the models and the best model will be discussed in the next section.
 
-### Logistic Regression
+#### Logistic Regression
 Logistic regression model, it predicts the likelihood of a yes or no outcome based on the input features, which in our case, is whether a crime is less violent or not. It then classifies the result based on whether the likelihood exceeds a certain threshold. For our model, we selected `solver = "newton-cholesky"` and kept the maximum iterations to 1000 to reserve computing power.
 
-### Support Vector Machine (SVM)
+#### Support Vector Machine (SVM)
 SVM finds the best decision hyperplane that maximizes its separation from the support vectors-the nearest data points from each class. It establishes the broadest "margin" or buffer zone between classes to guarantee the strongest possible separation. We also limited the maximum iterations to 2000 because without it, the model runs forever. No ROC curve could be produced because of two `AttributeErrors`. 
 
-### Decision Tree Classifier
+#### Decision Tree Classifier
 A decision tree is similar to a yes/no flowchart, with data separated at each step based on feature values. It asks questions like, *Is the victim over 30?* and *Is sex = H?* until it reaches a final categorization at the leaf nodes where Gini Impurity is 0. We kept the `max_depth = 8` for computation purposes. Tree diagram shown below:
 
 ![Decision Tree Diagram](Assets/tree.png)
 ***Figure 12:** Decision Tree Diagram (depth 8)*
 
-### Random Forest Classifier
+#### Random Forest Classifier
 Random forest is the next step of a decision tree. It generates hundreds of distinct decision trees using random subsets of data and features, then uses a majority vote from all trees. It's like asking 1000 different experts (trees) for their thoughts and going with whatever the majority decides. The final class is determined by a majority vote among all trees, boosting stability and accuracy. We kept `max_depth = 25` and `n_estimators = 500` for computational purposes.
 
-### Extreme Gradient Boosting (XGBoost) Classifier
+#### Extreme Gradient Boosting (XGBoost) Classifier
 XGBoost is an ensemble learning method that builds multiple decision trees sequentially, where each new tree tries to correct the errors of the previous ones. It combines these trees’ predictions using a weighted sum to produce highly accurate classifications. For our model, we set `n_estimators = 1000`, `max_depth = 50` and `learning_rate = 0.1` to balance performance and computation, while using `eval_metric = "logloss"` to monitor training progress.
 
-### K-Nearest Neighbour (KNN) Classifier
+#### K-Nearest Neighbour (KNN) Classifier
 The K-Nearest Neighbour (KNN) classifier predicts the class of a data point based on the majority class of its closest neighbors in the feature space. It essentially “asks” nearby observations, Who are your closest friends, and what class do they belong to? to decide the classification. The number of neighbors (k) controls how many nearby points influence the decision, and distance metrics determine how closeness is calculated. For our model, we relied on the default parameters. KNN is straightforward and interpretable but can be computationally intensive for large datasets because it needs to calculate distances to all points for each prediction.
 
-### Gaussian Naive Bayes (GNB) Classifier
+#### Gaussian Naive Bayes (GNB) Classifier
 The Gaussian Naive Bayes (GNB) classifier applies Bayes’ theorem under the assumption that the features are independent and normally distributed within each class. It calculates the probability of a data point belonging to each class based on its feature values, then chooses the class with the highest likelihood. This method is highly efficient and works well with high-dimensional data because it requires estimating only a few parameters per feature. For our model, we relied on the default Gaussian likelihood assumption, which allowed rapid training and prediction, making GNB particularly suitable for large datasets or situations where computation speed is critical.
 
 
 
-## Performance Evaluation
+### Performance Evaluation
 
-### Summary of the Model Performances
+#### Summary of the Model Performances
 The findings of the above graph are visualized across accuracy, ROC AUC, F1 Score (less violent), and RMSE in the next page as well as the ROC curves of three models (SVM required additional steps).
 
 ***Table 3:** Model Performance*
@@ -230,12 +232,12 @@ Overall, the random forest model achieved an accuracy of 90.41%, correctly class
 6. K-Nearest Neighbors (KNN)
 7. Support Vector Machine (SVM)
 
-# Conclusion
-## Reflection on the Project
+## Conclusion
+### Reflection on the Project
 This was a very critical, thoughtful, and impactful project. The whole process helped in teaching how to read between the lines of data, utilize Al tools as a helping method rather than fully depending on it, generate meaningful insights which can later lead to data-driven decision makings, polish messy data, generate models which can predict outcomes, conduct sanity checks, and so on. Overall, this project will benefit in the future data problems and roles significantly. 
 
 
-## Bangladeshi Context & Benefits
+### Bangladeshi Context & Benefits
 Such dataset and insights could be extremely helpful for Bangladeshi law enforcement agencies. The way the data is collected and analyzed to find patterns can teach our law enforcement to utilize data and take critical data-driven decisions. Overall, the work has critical importance in Bangladeshi context.
 
 </div>
